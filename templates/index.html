@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detector de Instrumentos IA</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>Detector de Instrumentos con IA</h1>
+
+        <input type="file" id="audioFile">
+        <button onclick="analyzeAudio()">Analizar</button>
+
+        <div id="resultados"></div>
+    </div>
+
+<script>
+function analyzeAudio() {
+    const fileInput = document.getElementById("audioFile");
+    const formData = new FormData();
+    formData.append("audio", fileInput.files[0]);
+
+    fetch("/analyze", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        let html = "<h2>Instrumentos detectados:</h2>";
+        data.forEach(item => {
+            html += `<p>${item.instrumento} - ${item.confianza.toFixed(2)}%</p>`;
+        });
+        document.getElementById("resultados").innerHTML = html;
+    });
+}
+</script>
+
+</body>
+</html>

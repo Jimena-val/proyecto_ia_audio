@@ -19,6 +19,24 @@ with open("yamnet_class_map.csv", "r") as f:
     for line in f:
         class_names.append(line.strip().split(",")[2])
 
+#def detectar_instrumentos(audio_path):
+    #waveform, sr = librosa.load(audio_path, sr=16000)
+
+    #scores, embeddings, spectrogram = model(waveform)
+
+    #scores_np = scores.numpy()
+    #mean_scores = np.mean(scores_np, axis=0)
+
+    #top_indices = np.argsort(mean_scores)[-5:][::-1]
+
+    #resultados = []
+    #for i in top_indices:
+        #resultados.append({
+            #"instrumento": class_names[i],
+            #"confianza": float(mean_scores[i] * 100)
+        #})
+
+    #return resultados
 def detectar_instrumentos(audio_path):
     waveform, sr = librosa.load(audio_path, sr=16000)
 
@@ -27,16 +45,41 @@ def detectar_instrumentos(audio_path):
     scores_np = scores.numpy()
     mean_scores = np.mean(scores_np, axis=0)
 
-    top_indices = np.argsort(mean_scores)[-5:][::-1]
+    instrumentos_clave = [
+        "piano",
+        "guitar",
+        "drum",
+        "violin",
+        "cello",
+        "flute",
+        "trumpet",
+        "saxophone",
+        "clarinet",
+        "harp",
+        "bass",
+        "organ",
+        "ukulele",
+        "synthesizer"
+    ]
 
     resultados = []
-    for i in top_indices:
-        resultados.append({
-            "instrumento": class_names[i],
-            "confianza": float(mean_scores[i] * 100)
-        })
 
-    return resultados
+    for i, score in enumerate(mean_scores):
+        nombre = class_names[i].lower()
+
+        if any(inst in nombre for inst in instrumentos_clave):
+            if score > 0.01:
+                resultados.append({
+                    "instrumento": class_names[i],
+                    "confianza": float(score * 100)
+                })
+
+    resultados = sorted(resultados, key=lambda x: x["confianza"], reverse=True)
+
+    if not resultados:
+        return [{"instrumento": "No se detectaron instrumentos claramente", "confianza": 0}]
+
+    return resultados[:5]
 
 @app.route("/")
 def index():

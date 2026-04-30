@@ -7,20 +7,51 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Detector de Instrumentos con IA</h1>
+<div class="container">
+    <h1>🎵 Detector de Instrumentos IA</h1>
+    <p class="subtitle">Sube una canción y descubre qué instrumentos contiene</p>
 
-        <input type="file" id="audioFile">
-        <button onclick="analyzeAudio()">Analizar</button>
-
-        <div id="resultados"></div>
+    <div class="upload-box">
+        <input type="file" id="audioFile" accept="audio/*" onchange="previewAudio()">
+        <label for="audioFile" id="uploadLabel">Seleccionar archivo</label>
+        <span id="statusText"></span>
     </div>
 
+    <audio id="audioPlayer" controls style="display:none;"></audio>
+
+    <button onclick="analyzeAudio()">Analizar canción</button>
+
+    <div id="loading" class="loading" style="display:none;">
+        Analizando audio...
+    </div>
+
+    <div id="resultados"></div>
+</div>
+
 <script>
+function previewAudio() {
+    const fileInput = document.getElementById("audioFile");
+    const statusText = document.getElementById("statusText");
+    const player = document.getElementById("audioPlayer");
+
+    if(fileInput.files.length > 0){
+        const file = fileInput.files[0];
+
+        statusText.innerHTML = "✔ Archivo cargado";
+        statusText.classList.add("loaded");
+
+        player.src = URL.createObjectURL(file);
+        player.style.display = "block";
+    }
+}
+
 function analyzeAudio() {
     const fileInput = document.getElementById("audioFile");
     const formData = new FormData();
     formData.append("audio", fileInput.files[0]);
+
+    document.getElementById("loading").style.display = "block";
+    document.getElementById("resultados").innerHTML = "";
 
     fetch("/analyze", {
         method: "POST",
@@ -28,10 +59,18 @@ function analyzeAudio() {
     })
     .then(response => response.json())
     .then(data => {
-        let html = "<h2>Instrumentos detectados:</h2>";
+        document.getElementById("loading").style.display = "none";
+
+        let html = "<h2>Instrumentos detectados</h2>";
         data.forEach(item => {
-            html += `<p>${item.instrumento} - ${item.confianza.toFixed(2)}%</p>`;
+            html += `
+                <div class="instrument-card">
+                    <span>${item.instrumento}</span>
+                    <span>${item.confianza.toFixed(2)}%</span>
+                </div>
+            `;
         });
+
         document.getElementById("resultados").innerHTML = html;
     });
 }

@@ -49,12 +49,12 @@ Esto ayuda a que las variables del sistema se actualicen correctamente.
 Abrir VS Code y clonar el proyecto:
 
 # Paso 4: Instalar dependencias
-Desde la terminal de VS Code ejecutar:
-pip install flask tensorflow tensorflow-hub librosa numpy soundfile
+Desde la terminal de VS Code ejecutar: /n
+pip install flask tensorflow tensorflow-hub librosa numpy soundfile /n
 Esto instalará todas las librerías necesarias para el proyecto.
 
 # Paso 5: Ejecutar el servidor
-Una vez instaladas las dependencias ejecutar:
+Una vez instaladas las dependencias ejecutar: /n
 python app.py
 
 Si todo es correcto aparecerá algo similar a: Running on http://127.0.0.1:5000

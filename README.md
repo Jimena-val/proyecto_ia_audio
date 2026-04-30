@@ -44,7 +44,7 @@ Esto ayuda a que las variables del sistema se actualicen correctamente.
 
 ---
 
-# ✅ Paso 3: Clonar el repositorio
+# Paso 3: Clonar el repositorio
 
 Abrir VS Code y clonar el proyecto:
 

@@ -61,4 +61,5 @@ Si todo es correcto aparecerá algo similar a: Running on http://127.0.0.1:5000
 
 # Paso 6: Abrir en navegador
 
-# NOTA -> Este proyecto usa un modelo preentrenado para clasificación de audio, por lo que algunos resultados pueden variar dependiendo de la calidad del archivo musical.
+# NOTA 
+Este proyecto usa un modelo preentrenado para clasificación de audio, por lo que algunos resultados pueden variar dependiendo de la calidad del archivo musical.
